@@ -1,7 +1,7 @@
 var notifier = require('mail-notifier');
 var https = require('https');
 var querystring = require('querystring');
-var config=require('./config');
+var config = require('./config');
 const uuidV4 = require('uuid/v4');
 var todoist_token = config.todoist_token;
 var predefined_parameters = require('./predefined_parameters');
@@ -29,26 +29,10 @@ notifier(imap).on('mail', function (mail) {
         });
     }
     task_data.assign_to_count = cc_list.length;
-
-    //check project list
-    var post_data_project_list = querystring.stringify({
-        'token': todoist_token,
-        'sync_token': '*',
-        'resource_types': '["projects"]',
-
-    });
-    var options_project_list = {
-        hostname: 'todoist.com',
-        port: 443,
-        path: '/API/v7/sync',
-        method: 'POST',
-        headers: {
-            'Content-Type': 'application/x-www-form-urlencoded',
-            'Content-Length': Buffer.byteLength(post_data_project_list)
-        }
-    };
     if (mail.subject) {
         subject = mail.subject;
+    } else {
+        subject = "";
     }
     var mail_text_lines = mail.text.split('\n');
     var task_text = "";
@@ -100,24 +84,23 @@ function HandleAllProjectsList(response, project, task_data, cc_list) {
         var projects_data = JSON.parse(data);
         var err;
         //console.log("HandleAllProjectsList projects: ",projects_data.projects);
-        for (var i = 0; i < projects_data.projects.length; i++) {
-            if (projects_data.projects[i].name.trim().toLowerCase() == project.toLowerCase()) {
-                task_data.project_id = projects_data.projects[i].id;
+        if (projects_data.projects.legth > 0) {
+            for (var i = 0; i < projects_data.projects.length; i++) {
+                if (projects_data.projects[i].name.trim().toLowerCase() == project.toLowerCase()) {
+                    task_data.project_id = projects_data.projects[i].id;
 
-                //collaborator list check
+                    //console.log("Task data: ",task_data);
+                    var projects = https.request(predefined_parameters.options_collaborators_list, function (response) {
+                        HandleAllCollaboratorsList(response, cc_list, task_data);
+                    });
 
+                    projects.write(predefined_parameters.post_data_collaborators_list);
+                    projects.end();
 
-
-
-                //console.log("Task data: ",task_data);
-                var projects = https.request(predefined_parameters.options_collaborators_list, function (response) {
-                    HandleAllCollaboratorsList(response, cc_list, task_data);
-                });
-
-                projects.write(predefined_parameters.post_data_collaborators_list);
-                projects.end();
-
+                }
             }
+        }else{
+            console.log("No projects found");
         }
     });
 }

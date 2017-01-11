@@ -1,12 +1,7 @@
 var querystring = require('querystring');
 var config=require('./config');
 var todoist_token = config.todoist_token;
-var post_data_project_list = querystring.stringify({
-    'token': todoist_token,
-    'sync_token': '*',
-    'resource_types': '["projects"]',
 
-});
 var imap = {
     user: config.user,
     password: config.password,
@@ -15,6 +10,12 @@ var imap = {
     tls: config.tls,
     tlsOptions: config.tlsOptions
 };
+var post_data_project_list = querystring.stringify({
+    'token': todoist_token,
+    'sync_token': '*',
+    'resource_types': '["projects"]',
+
+});
 var options_project_list = {
     hostname: 'todoist.com',
     port: 443,
