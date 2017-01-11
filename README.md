@@ -4,7 +4,9 @@ Simple NodeJS application that will listen for new mails on account defined in i
 Mail form:
 
 to: mail.defined@in.imap
+
 cc: mail.of.user.that@is.collaborator
+
 subject: Todoist project name
 body first line: is task text
 body second line:  is date string(otional)    
