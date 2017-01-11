@@ -1,4 +1,4 @@
-# todoist_by_mail
+# Todoist by mail
 Simple NodeJS application that will listen for new mails on account defined in imap config(in config.js file). On receiving new mail it will add new task to Todoist account that have token defined in config.js file.
 
 Mail form:
