@@ -7,7 +7,6 @@ to: mail.defined@in.imap
 cc: mail.of.user.that@is.collaborator
 
 subject: Todoist project name
-
-body: first line is task text
-      second line is date string(otional)
-      third line is priority of task(1-4)
+body first line: is task text
+body second line:  is date string(otional)    
+body third line: is priority of task(1-4)
