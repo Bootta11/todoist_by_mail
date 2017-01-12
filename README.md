@@ -19,3 +19,24 @@ If we have Todoist account with project named "Work", collaborator at that proje
     mail body first line: My new task  
     mail body second line (optional): today  
     mail body third line (optional): 3  
+
+## Installation
+
+Requirments:
+- [NodeJS](https://nodejs.org/en/)
+- [Git](https://git-scm.com/)
+
+
+After all requirments resolved follow next steps to run todoist_by_mail:   
+
+- First clone todoist_by_mail repository:  
+```git clone https://github.com/Bootta11/todoist_by_mail.git```  
+
+- Move to cloned directory
+- Install all NodeJS packages:  
+```npm install```
+
+- Edit config.js(change to your own parameters)  
+- Run todoist_by_mail:  
+```node app.js```  
+
