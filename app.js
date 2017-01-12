@@ -60,8 +60,8 @@ notifier(imap).on('mail', function (mail) {
     task_data.task = task_text;
     task_data.date_string = task_date_string;
     //console.log("Task data1: ",task_data);
-    console.log(predefined_parameters.options_project_list);
-    console.log(predefined_parameters.post_data_project_list);
+    //console.log(predefined_parameters.options_project_list);
+    //console.log(predefined_parameters.post_data_project_list);
     var projects = https.request(predefined_parameters.options_project_list, function (response) {
         HandleAllProjectsList(response, subject, task_data, cc_list);
     });
@@ -84,24 +84,25 @@ function HandleAllProjectsList(response, project, task_data, cc_list) {
         var projects_data = JSON.parse(data);
         var err;
         //console.log("HandleAllProjectsList projects: ",projects_data.projects);
-        if (projects_data.projects.legth > 0) {
-            for (var i = 0; i < projects_data.projects.length; i++) {
-                if (projects_data.projects[i].name.trim().toLowerCase() == project.toLowerCase()) {
-                    task_data.project_id = projects_data.projects[i].id;
 
-                    //console.log("Task data: ",task_data);
-                    var projects = https.request(predefined_parameters.options_collaborators_list, function (response) {
-                        HandleAllCollaboratorsList(response, cc_list, task_data);
-                    });
+        for (var i = 0; i < projects_data.projects.length; i++) {
+            if (projects_data.projects[i].name.trim().toLowerCase() == project.toLowerCase()) {
+                task_data.project_id = projects_data.projects[i].id;
 
-                    projects.write(predefined_parameters.post_data_collaborators_list);
-                    projects.end();
+                //console.log("Task data: ", task_data);
+                var projects = https.request(predefined_parameters.options_collaborators_list, function (response) {
+                    HandleAllCollaboratorsList(response, cc_list, task_data);
+                });
 
-                }
+                projects.write(predefined_parameters.post_data_collaborators_list);
+                projects.end();
+
             }
-        }else{
+        }
+        if (!task_data.project_id) {
             console.log("No projects found");
         }
+
     });
 }
 
@@ -185,3 +186,4 @@ function CheckIsAllDataSubmited(task_data) {
         SubmitTaskToTodoist(todoist_token, task_data.project_id, task_data.task, task_data.assign_to, task_data.date_string, task_data.priority);
     }
 }
+
