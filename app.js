@@ -60,8 +60,7 @@ notifier(imap).on('mail', function (mail) {
     task_data.task = task_text;
     task_data.date_string = task_date_string;
     //console.log("Task data1: ",task_data);
-    //console.log(predefined_parameters.options_project_list);
-    //console.log(predefined_parameters.post_data_project_list);
+
     var projects = https.request(predefined_parameters.options_project_list, function (response) {
         HandleAllProjectsList(response, subject, task_data, cc_list);
     });
